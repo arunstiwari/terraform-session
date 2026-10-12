@@ -1,0 +1,1 @@
+{"count":3,"has_billing":false,"highest_port":9090,"joined":"SERVICE1,SERVICE2,SERVICE3","merged_tags":{"env":"$lower(var.app_environment)-app","managed_by":"terraform"},"public_count":2,"timestamp":"2026-10-12"}

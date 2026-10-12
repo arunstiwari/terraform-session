@@ -1,0 +1,59 @@
+name: React Project Setup and Execution
+description: This action will setup Node and NPM. It also will build the React project and run the unit test
+
+
+inputs:
+  node-version:
+    description: 'The specific version of the Node'
+    required: true
+    default: '24.x'
+   
+
+  working-directory:
+    description: 'Path where the package.json file resides'
+    default: './'
+    required: false
+
+  doWeWantToInstallDependencies:
+    description: Flag to decide whether we want to install dependencies or not
+    default: 'true'
+    required: false
+
+outputs:
+  node-version: 
+    description: 'The exact version of Node which was installed'
+    value: ${{ steps.nodeid.outputs.node-version }}
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node JS
+      id: nodeid
+      uses: actions/setup-node@v7
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'npm'
+        cache-dependency-path: '${{ inputs.working-directory}}/package-lock.json'
+
+    - name: Install the dependencies
+      working-directory: ${{inputs.working-directory}}
+      if: ${{ inputs.doWeWantToInstallDependencies == 'true' }}
+      shell: 
+      run: |
+        npm install 
+
+    - name: Execute the Unit Test
+      working-directory: ${{inputs.working-directory}}
+      shell: 
+      run: |
+        npm ci
+        
+        
+
+  
+
+
+    
+    
+  
+

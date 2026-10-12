@@ -1,0 +1,43 @@
+name: Condition Workflow
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment
+        type: choice
+        default: dev
+        options:
+          - dev
+          - staging
+          - production
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Always runs
+        run: echo "Runs in all conditions"
+
+      - name: Runs when environment is staging
+        if: inputs.environment == 'staging'
+        run: echo "Environment is staging"
+
+  failure_handling:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Failing step
+        id: failing-step
+        continue-on-error: true
+        run: |
+          echo "This step will fail but the other steps will continue"
+          exit 1
+      - name: Report Outcome
+        run: |
+          echo "outcome of last step: $OUTCOME"
+          echo "conclusion of last step: $CONCLUSION"
+        env:
+          OUTCOME: ${{steps.failing-step.outcome}}
+          CONCLUSION: ${{steps.failing-step.conclusion}}
+            
+   
+      

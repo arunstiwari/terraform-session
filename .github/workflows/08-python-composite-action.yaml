@@ -1,0 +1,34 @@
+name: Python Composite Action
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13', '3.14']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Python action setup
+        id: python-action-setup
+        uses: ./.github/actions/python-action-setup
+        with:
+          python-version: ${{ matrix.python-version }}
+          pip-version: '26.2.1'
+          working-directory: fastapi-app
+          coverage-minimum: '80'
+          # Dependencies are identical across Python versions, so scan only once
+          run-trivy: ${{ matrix.python-version == '3.13' }}
+
+      - name: Print outputs
+        run: |
+          echo "Python: $PYTHON_VERSION"
+          echo "pip: $PIP_VERSION"
+          echo "Coverage: $COVERAGE%"
+        env:
+          PYTHON_VERSION: ${{ steps.python-action-setup.outputs.python-version }}
+          PIP_VERSION: ${{ steps.python-action-setup.outputs.pip-version }}
+          COVERAGE: ${{ steps.python-action-setup.outputs.coverage }}

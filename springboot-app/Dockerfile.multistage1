@@ -1,0 +1,25 @@
+FROM 3.10.0-eclipse-temurin-21 AS builder
+WORKDIR /opt/app
+COPY --from=DEPENDENCIES /root/.m2 /root/.m2
+COPY --from=DEPENDENCIES /opt/app/ /opt/app
+COPY api/src /opt/app/api/src
+COPY domain/src /opt/app/domain/src
+
+WORKDIR /build
+COPY mvnw pom.xml ./
+COPY .mvn .mvn
+RUN ./mvnw -B -q dependency:go-offline
+COPY src src
+RUN ./mvnw -B -q package -DskipTests && cp target/springboot-app-*.jar app.jar
+
+
+FROM eclipse-temurin:21-jre AS runtime
+RUN useradd --create-home --uid 10001 appuser
+WORKDIR /app
+COPY --from=builder 
+
+USER appuser
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
+

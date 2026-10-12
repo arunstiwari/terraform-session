@@ -1,0 +1,51 @@
+name: 02-workflow
+on: workflow_dispatch
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+      - name: Setup NodeJS
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+      - name: Print Node Version
+        run: node --version
+  context-dump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print GitHub Context
+        run: echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{toJson(github)}}
+
+      - name: Print Runner Context
+        run: echo "$RUNNER_CONTEXT"
+        env:
+          RUNNER_CONTEXT: ${{toJson(runner)}}
+
+      - name: Print Job Context
+        run: echo "$JOB_CONTEXT"
+        env:
+          JOB_CONTEXT: ${{toJson(job)}}
+
+      - name: Print Steps context
+        run: echo "$STEPS_CONTEXT"
+        env:
+          STEPS_CONTEXT: ${{toJson(steps)}}
+
+  use-context:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Summarize my run
+        run: echo "$ACTOR triggered an event $EVENT_NAME on code referenced $REF_NAME ($SHA)"
+        env:
+          ACTOR: ${{github.actor}}
+          EVENT_NAME: ${{github.event_name}}
+          SHA: ${{github.sha}}
+      
+          
+        
+  

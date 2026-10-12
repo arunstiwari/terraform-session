@@ -1,0 +1,26 @@
+name: Matrix Workflow
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ${{matrix.os}}
+    strategy:
+       matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [18, 20, 22]
+    steps:
+      - name: Setup Node ${{matrix.node-version}}
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{matrix.node-version}}
+        
+      - name: Run the step for different matrix
+        run: |
+          echo " Running for different OS"
+
+ 
+           
+  
+      
+        
+      
+        
