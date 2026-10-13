@@ -22,3 +22,24 @@ variable "subnet_ids" {
     error_message = "An ALB needs subnets in at least two AZs."
   }
 }
+
+variable "app_source_dir" {
+
+  description = "The directory containing the application source code"
+  type        = string
+  default     = "../../fastapi-app"
+}
+
+variable "dockerfile" {
+  description = "The path to the Dockerfile"
+  type        = string
+  default     = "Dockerfile"
+}
+
+variable "container_port" {
+  description = "The port on which the container listens"
+  type        = number
+  default     = 8000
+}
+
+
