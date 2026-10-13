@@ -1,8 +1,0 @@
-app.username: app_user
-app.password: app_password
-app.replicas: 2
-app.environment: $lower(var.app_environment)-app
-feature.metrics=true
-owner.team: devops
-owner.email: devops@example.com
-

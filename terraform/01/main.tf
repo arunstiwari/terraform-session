@@ -46,6 +46,10 @@ resource "local_file" "example" {
   content         = var.database_username
   filename        = "${path.module}/hello.txt"
   file_permission = "0644"
+
+  #   lifecycle {
+  #     prevent_destroy = true
+  #   }
 }
 
 
@@ -94,11 +98,27 @@ module "billing" {
   app_name    = "billing"
   environment = each.key
   port        = each.value
-  output_dir  = "${path.module}/output"
+  output_dir  = "${path.module}/output1"
   extra_settings = {
     "billing_currency" = "USD"
   }
 }
+
+resource "local_file" "always_present" {
+  filename = "${path.module}/output/always_present.txt"
+  content  = "This file is always present"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "random_password" "database_password" {
+  length  = 16
+  special = false
+}
+
+
 
 
 

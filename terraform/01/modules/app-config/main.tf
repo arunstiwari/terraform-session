@@ -12,6 +12,6 @@ locals {
 }
 
 resource "local_file" "properties" {
-  filename = "${local.settings["output_dir"]}/application.properties"
+  filename = "${local.settings["output_dir"]}${var.environment}/application.properties"
   content  = join("\n", [for k, v in local.settings : "${k}=${v}"])
 }
