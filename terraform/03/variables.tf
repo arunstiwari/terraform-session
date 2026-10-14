@@ -42,4 +42,30 @@ variable "container_port" {
   default     = 8000
 }
 
+variable "task_cpu" {
+  description = "Task CPU units (256 = 0.25 vCPU)."
+  type        = number
+  default     = 256
+}
 
+variable "task_memory" {
+  description = "Task memory in MiB. Must be a valid combination with task_cpu."
+  type        = number
+  default     = 512
+}
+
+variable "log_retention_days" {
+  description = "CloudWatch Logs retention."
+  type        = number
+  default     = 7
+}
+
+variable "cpu_architecture" {
+  description = "The CPU architecture for the ECS task (e.g., X86_64, ARM64)."
+  type        = string
+  default     = "X86_64"
+}
+variable "container_image" {
+  description = "The Docker image for the container"
+  type        = string
+}
